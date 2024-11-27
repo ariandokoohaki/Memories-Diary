@@ -1,0 +1,39 @@
+<!-- templates/register.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Memory App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Create an Account</h1>
+    </header>
+
+    <main>
+        <section class="form-section">
+            {% if message %}
+                <div class="message error">{{ message }}</div>
+            {% endif %}
+            <h2>Sign Up</h2>
+            <form action="/users/register" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">Register</button>
+            </form>
+        </section>
+
+        <p>Already have an account? <a href="/users/login">Login here</a>.</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Memory App. All rights reserved.</p>
+    </footer>
+</body>
+</html>

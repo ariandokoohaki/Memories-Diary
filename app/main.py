@@ -12,7 +12,6 @@ from sqlalchemy.future import select
 from app.auth import get_current_user
 from app.db.base import Base
 from app.db.session import get_db, sync_engine
-from app.models import memory_model, user_model
 from app.routers import memory, user
 from app.templates import templates  # Import templates from app.templates
 
@@ -80,7 +79,7 @@ async def serve_login(request: Request):
 @app.get("/memories", response_class=HTMLResponse)
 async def serve_memories(
     request: Request,
-    current_user: user_model.User = Depends(get_current_user),
+    current_user: Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(

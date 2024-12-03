@@ -216,6 +216,3 @@ async def test_get_memories_authenticated(client):
     response = await client.get("/memories")
     assert response.status_code == 200
     assert "No memories found" in response.text or "Your memories" in response.text
-git add .
-git commit -m "Fix flake8 errors and update CI/CD workflow"
-git push origin main

@@ -1,0 +1,39 @@
+<!-- templates/login.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Memory App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome Back</h1>
+    </header>
+
+    <main>
+        <section class="form-section">
+            {% if message %}
+                <div class="message error">{{ message }}</div>
+            {% endif %}
+            <h2>Login</h2>
+            <form action="/users/login" method="POST">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" name="username" required>
+
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="password" required>
+
+                <button type="submit">Login</button>
+            </form>
+        </section>
+
+        <p>Don't have an account? <a href="/users/register">Register here</a>.</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Memory App. All rights reserved.</p>
+    </footer>
+</body>
+</html>

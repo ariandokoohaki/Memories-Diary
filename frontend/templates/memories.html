@@ -1,0 +1,56 @@
+<!-- templates/memories.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Memories - Memory App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Your Memories</h1>
+        <p>Write and revisit your thoughts</p>
+        <nav>
+            <ul>
+                <li><a href="/memories">Home</a></li>
+                <li><a href="/users/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="form-section">
+            <h2>Create a New Memory</h2>
+            <form action="/memories" method="POST">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+
+                <button type="submit">Save Memory</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Previous Memories</h2>
+            <div id="memoriesList">
+                {% for memory in memories %}
+                    <article class="memory-item">
+                        <h3>{{ memory.title }}</h3>
+                        <p>{{ memory.description }}</p>
+                        <small>Created at: {{ memory.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                    </article>
+                {% else %}
+                    <p>No memories found.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Memory App. All rights reserved.</p>
+    </footer>
+</body>
+</html>

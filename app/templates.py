@@ -1,6 +1,7 @@
 # app/templates.py
 
 import os
+
 from fastapi.templating import Jinja2Templates
 
 current_dir = os.path.dirname(os.path.abspath(__file__))

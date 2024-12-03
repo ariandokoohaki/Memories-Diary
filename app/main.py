@@ -1,19 +1,21 @@
 # app/main.py
 
 import os
-from fastapi import FastAPI, Request, Depends, HTTPException, status
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
+
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from app.db.base import Base
-from app.db.session import sync_engine, get_db
-from app.models import user_model, memory_model
-from app.routers import user, memory
 from app.auth import get_current_user
+from app.db.base import Base
+from app.db.session import get_db, sync_engine
+from app.models import memory_model, user_model
+from app.routers import memory, user
 from app.templates import templates  # Import templates from app.templates
+
 
 if not os.path.exists("./data"):
     os.makedirs("./data")
@@ -21,8 +23,10 @@ if not os.path.exists("./data"):
 
 app = FastAPI()
 
+
 # Initialize the database with all models (using synchronous engine)
 Base.metadata.create_all(bind=sync_engine)
+
 
 # Allow CORS (adjust origins as needed)
 app.add_middleware(
@@ -33,9 +37,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # Include routers
 app.include_router(user.router)
 app.include_router(memory.router)
+
 
 # Get the directory of the current file (app/main.py)
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -46,6 +52,7 @@ static_dir = os.path.join(current_dir, "..", "frontend", "static")
 # Verify the static directory exists
 if not os.path.isdir(static_dir):
     raise RuntimeError(f"Static directory '{static_dir}' does not exist")
+
 
 # Mount static files
 app.mount("/static", StaticFiles(directory=static_dir), name="static")

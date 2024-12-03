@@ -1,13 +1,13 @@
 # app/auth.py
 
-from fastapi import Depends, HTTPException, status, Request
+from fastapi import Depends, HTTPException, Request, status
 from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from app.models.user_model import User
-from app.db.session import get_db
 from app.core.config import settings
+from app.db.session import get_db
+from app.models.user_model import User
 
 
 async def get_current_user(request: Request, db: AsyncSession = Depends(get_db)):

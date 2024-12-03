@@ -1,16 +1,19 @@
-import sys
 import os
+import sys
 from logging.config import fileConfig
+
 from sqlalchemy import engine_from_config, pool
+
 from alembic import context
 
 # Add the project root directory to sys.path so Alembic can find the 'app' module
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from app.core.config import settings
+
 # Now, after sys.path has been modified, import your app modules
 from app.db.base import Base
-from app.core.config import settings
-from app.models import user_model, memory_model
+from app.models import memory_model, user_model
 
 # Alembic Config object, provides access to the .ini file settings
 config = context.config

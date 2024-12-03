@@ -1,16 +1,17 @@
 # app/routers/user.py
 
-from fastapi import APIRouter, Depends, HTTPException, status, Form, Response, Request
-from fastapi.responses import RedirectResponse, HTMLResponse
+from datetime import timedelta
+
+from fastapi import APIRouter, Depends, Form, HTTPException, Request, Response, status
+from fastapi.responses import HTMLResponse, RedirectResponse
+from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from datetime import timedelta
-from jose import JWTError, jwt
 
-from app.models.user_model import User
-from app.db.session import get_db
-from app.core.security import hash_password, verify_password, create_access_token
 from app.core.config import settings
+from app.core.security import create_access_token, hash_password, verify_password
+from app.db.session import get_db
+from app.models.user_model import User
 from app.templates import templates  # Import templates
 
 router = APIRouter(prefix="/users", tags=["users"])

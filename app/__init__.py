@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from .routers import user, memory
+
+from .routers import memory, user
 
 app = FastAPI()
 

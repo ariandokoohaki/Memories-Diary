@@ -13,10 +13,8 @@ from app.core.security import hash_password, verify_password, create_access_toke
 from app.core.config import settings
 from app.templates import templates  # Import templates
 
-router = APIRouter(
-    prefix="/users",
-    tags=["users"]
-)
+router = APIRouter(prefix="/users", tags=["users"])
+
 
 @router.post("/register", response_class=HTMLResponse)
 async def register(
@@ -24,7 +22,7 @@ async def register(
     response: Response,
     username: str = Form(...),
     password: str = Form(...),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     # Check if the user already exists
     stmt = select(User).filter(User.username == username)
@@ -34,8 +32,7 @@ async def register(
     if existing_user:
         # User already exists, render the register page with an error message
         return templates.TemplateResponse(
-            "register.html",
-            {"request": request, "message": "User already exists"}
+            "register.html", {"request": request, "message": "User already exists"}
         )
 
     # Hash the password and create a new user
@@ -52,12 +49,13 @@ async def register(
     # Redirect to login page after successful registration
     return RedirectResponse(url="/users/login", status_code=status.HTTP_302_FOUND)
 
+
 @router.post("/login")
 async def login(
     request: Request,
     username: str = Form(...),
     password: str = Form(...),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     # Retrieve user by username
     stmt = select(User).filter(User.username == username)
@@ -69,14 +67,13 @@ async def login(
         # Invalid credentials, render the login page with an error message
         return templates.TemplateResponse(
             "login.html",
-            {"request": request, "message": "Incorrect username or password"}
+            {"request": request, "message": "Incorrect username or password"},
         )
 
     # Create an access token
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": str(user.id)},
-        expires_delta=access_token_expires
+        data={"sub": str(user.id)}, expires_delta=access_token_expires
     )
 
     # Set the access token in a cookie
@@ -88,9 +85,10 @@ async def login(
         max_age=int(access_token_expires.total_seconds()),
         expires=int(access_token_expires.total_seconds()),
         samesite="lax",
-        secure=False  # Set to True if using HTTPS
+        secure=False,  # Set to True if using HTTPS
     )
     return response
+
 
 @router.get("/logout")
 async def logout(response: Response):

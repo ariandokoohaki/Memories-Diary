@@ -21,10 +21,12 @@ async_session = sessionmaker(
 # Synchronous engine for creating tables (sync for migrations, etc.)
 sync_engine = create_engine(settings.SYNC_DATABASE_URL, echo=False)
 
+
 # Dependency to get the async DB session
 async def get_db():
     async with async_session() as session:
         yield session
+
 
 # Test setup (override for testing)
 # Only used during tests to ensure that the test DB is properly connected

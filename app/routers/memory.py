@@ -10,10 +10,8 @@ from app.schemas.memory_schema import MemoryCreate
 from app.db.session import get_db
 from app.auth import get_current_user
 
-router = APIRouter(
-    prefix="/memories",
-    tags=["memories"]
-)
+router = APIRouter(prefix="/memories", tags=["memories"])
+
 
 @router.post("", response_class=RedirectResponse)
 async def create_memory(
@@ -21,7 +19,7 @@ async def create_memory(
     title: str = Form(...),
     description: str = Form(...),
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     new_memory = Memory(title=title, description=description, user_id=current_user.id)
     db.add(new_memory)

@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 from app.db.base import Base
 from datetime import datetime
 
+
 class Memory(Base):
     __tablename__ = "memories"
 

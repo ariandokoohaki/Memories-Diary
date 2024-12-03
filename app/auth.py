@@ -9,6 +9,7 @@ from app.models.user_model import User
 from app.db.session import get_db
 from app.core.config import settings
 
+
 async def get_current_user(request: Request, db: AsyncSession = Depends(get_db)):
     token = request.cookies.get("access_token")
     if not token:
@@ -25,7 +26,9 @@ async def get_current_user(request: Request, db: AsyncSession = Depends(get_db))
                 detail="Invalid authentication scheme.",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        payload = jwt.decode(param, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            param, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         user_id: str = payload.get("sub")
         if user_id is None:
             raise HTTPException(

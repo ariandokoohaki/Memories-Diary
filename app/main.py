@@ -15,8 +15,8 @@ from app.routers import user, memory
 from app.auth import get_current_user
 from app.templates import templates  # Import templates from app.templates
 
-if not os.path.exists('./data'):
-    os.makedirs('./data')
+if not os.path.exists("./data"):
+    os.makedirs("./data")
 
 
 app = FastAPI()
@@ -41,7 +41,7 @@ app.include_router(memory.router)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Build the absolute path to the 'frontend/static' directory
-static_dir = os.path.join(current_dir, '..', 'frontend', 'static')
+static_dir = os.path.join(current_dir, "..", "frontend", "static")
 
 # Verify the static directory exists
 if not os.path.isdir(static_dir):
@@ -50,36 +50,43 @@ if not os.path.isdir(static_dir):
 # Mount static files
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
+
 # Serve index.html
 @app.get("/", response_class=HTMLResponse)
 async def serve_index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
 
 # Serve register.html
 @app.get("/users/register", response_class=HTMLResponse)
 async def serve_register(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
 
+
 # Serve login.html
 @app.get("/users/login", response_class=HTMLResponse)
 async def serve_login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
+
 
 # Serve memories.html
 @app.get("/memories", response_class=HTMLResponse)
 async def serve_memories(
     request: Request,
     current_user: user_model.User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
-        select(memory_model.Memory).filter(memory_model.Memory.user_id == current_user.id)
+        select(memory_model.Memory).filter(
+            memory_model.Memory.user_id == current_user.id
+        )
     )
     memories = result.scalars().all()
     return templates.TemplateResponse(
         "memories.html",
-        {"request": request, "memories": memories, "user": current_user}
+        {"request": request, "memories": memories, "user": current_user},
     )
+
 
 # Exception handlers
 @app.exception_handler(HTTPException)
@@ -87,5 +94,5 @@ async def http_exception_handler(request: Request, exc: HTTPException):
     return templates.TemplateResponse(
         "error.html",
         {"request": request, "detail": exc.detail},
-        status_code=exc.status_code
+        status_code=exc.status_code,
     )

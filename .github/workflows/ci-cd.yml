@@ -36,6 +36,16 @@ jobs:
           pip install flake8
           flake8 .  # Adjust the path as needed
 
+      - name: Run Black Formatter Check
+        run: |
+          pip install black
+          black --check .
+
+      - name: Run isort Import Sort Check
+        run: |
+          pip install isort
+          isort --check-only .
+
       - name: Run Tests
         run: |
           pip install pytest pytest-asyncio httpx pytest-cov
